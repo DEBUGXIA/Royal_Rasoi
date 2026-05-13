@@ -1,112 +1,220 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { ShoppingBag, ChevronRight, Truck, CreditCard, ChevronUp, ChevronDown, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trash2, Plus, Minus, ShoppingBag, ChevronLeft } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
+const Cart = () => {
+  const [cart, setCart] = useState([
+    { name: "Mutton Seekh kebab", price: "420/-", image: "public/Food.svg", type: "nonveg", qty: 1 },
+    { name: "Paneer Tikka", price: "260/-", image: "public/Food1.svg", type: "veg", qty: 2 },
+    { name: "Veg Hakka Noodles", price: "230/-", image: "public/Food13.svg", type: "veg", qty: 1 }
+  ]);
 
-const Cart = ({ cartItems = [], updateQuantity = () => {}, removeFromCart = () => {} }) => {
-  
-  
-  const subtotal = cartItems.reduce((acc, item) => {
-    const price = parseInt(item.price?.toString().replace(/[^\d]/g, '')) || 0;
-    return acc + price * (item.quantity || 1);
-  }, 0);
+  // Clean currency syntax string (e.g. "420/-") to floating number
+  const parsePrice = (priceStr) => {
+    return parseFloat(priceStr.replace('/-', '')) || 0;
+  };
 
-  const tax = subtotal * 0.05;
-  const total = subtotal + tax;
+  // Up/down quantity and absolute structural mutation controls
+  const updateQty = (index, delta) => {
+    const updated = [...cart];
+    updated[index].qty = Math.max(1, updated[index].qty + delta);
+    setCart(updated);
+  };
 
-  if (cartItems.length === 0) {
-    return (
-      <div className="min-h-[80vh] flex flex-col items-center justify-center text-nevtext px-4">
-        <motion.div  initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="text-center">
-          <ShoppingBag size={100} className="mx-auto mb-6 opacity-20" />
-          <h2 className="text-3xl font-bold mb-2">Your Cart is Empty</h2>
-          <p className="opacity-60 mb-8">Looks like you haven't added any Royal flavors yet.</p>
-          <Link  to="/menu" className="inline-flex items-center gap-2 bg-gradient-to-r from-aboutBtn to-nevtext px-8 py-3 rounded-full text-black font-bold hover:shadow-lg transition-all" >
-            <ChevronLeft size={20} /> Back to Menu </Link>
-        </motion.div>
-      </div>
-    );
-  }
+  const removeItem = (index) => {
+    setCart(cart.filter((_, i) => i !== index));
+  };
+
+  // Dynamic real-time calculation aggregators
+  const subtotal = cart.reduce((acc, item) => acc + (parsePrice(item.price) * item.qty), 0);
+  const gstTax = subtotal * 0.05; // 5% GST for restaurant items
+  const deliveryCharge = subtotal > 500 || subtotal === 0 ? 0 : 40;
+  const grandTotal = subtotal + gstTax + deliveryCharge;
 
   return (
-    <div className="max-w-6xl mx-auto p-6 md:p-10 text-nevtext">
-      <header className="flex justify-between items-end mb-10 border-b border-white/10 pb-6">
-        <div>
-          <h1 className="text-4xl font-bold">Your Selection</h1>
-          <p className="opacity-60 mt-1">{cartItems.length} items in your tray</p>
-        </div>
-        <Link to="/menu" className="text-sm font-medium hover:text-aboutBtn transition-colors"> Continue Shopping</Link>
-      </header>
+    <div className="min-h-screen py-10 px-4 sm:px-6 lg:px-8 font-sans antialiased text-nevtext">
+      <div className="max-w-5xl mx-auto">
+        
+        {/* Navigation Map Path */}
+        <nav className="flex items-center space-x-2 text-sm text-nevtext mb-6">
+          <span className="hover:text-amber-900 cursor-pointer">Menu</span>
+          <ChevronRight className="w-4 h-4" />
+          <span className="text-nevtext font-semibold">Current Order Summary</span>
+        </nav>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-        <div className="lg:col-span-2 space-y-6">
-          <AnimatePresence mode='popLayout'>
-            {cartItems.map((item) => (
-              <motion.div key={item.name} layout initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, x: -100 }} className="bg-white/5 backdrop-blur-md border border-white/10 p-5 rounded-3xl flex flex-col sm:flex-row items-center gap-6" >
-                <img  src={item.image}  alt={item.name}  className="w-24 h-24 object-contain bg-black/20 rounded-2xl p-2" />
-                
-                <div className="flex-1 text-center sm:text-left">
-                  <h3 className="text-xl font-semibold">{item.name}</h3>
-                  <span className={`text-xs uppercase tracking-widest ${item.type === 'veg' ? 'text-green-400' : 'text-red-400'}`}>
-                    {item.type}
-                  </span>
-                  <p className="text-aboutBtn font-bold mt-1">₹{item.price}</p>
-                </div>
-
-                <div className="flex items-center gap-4 bg-white/5 rounded-2xl px-4 py-2 border border-white/5">
-                  <button  onClick={() => updateQuantity(item.name, -1)} className="p-1 hover:text-aboutBtn transition-colors disabled:opacity-30" disabled={item.quantity <= 1}>
-                    <Minus size={18} />
-                  </button>
-                  <span className="font-bold text-lg min-w-[20px] text-center">{item.quantity}</span>
-                  <button onClick={() => updateQuantity(item.name, 1)} className="p-1 hover:text-aboutBtn transition-colors">
-                    <Plus size={18} />
-                  </button>
-                </div>
-
-                <button onClick={() => removeFromCart(item.name)} className="p-3 text-white/40 hover:text-red-400 hover:bg-red-400/10 rounded-2xl transition-all">
-                  <Trash2 size={22} />
-                </button>
-              </motion.div>
-            ))}
-          </AnimatePresence>
+        {/* Page Top Header */}
+        <div className="border-b border-amber-900/10 pb-5 mb-8">
+          <h1 className="text-3xl font-extrabold tracking-tight text-nevtext">Review Your Order</h1>
+          <p className="text-sm text-nevtext mt-1">Please confirm your culinary selections before checking out.</p>
         </div>
 
-        {/* Summary Card */}
-        <div className="lg:col-span-1">
-          <div className="bg-white/5 backdrop-blur-2xl border border-white/10 p-8 rounded-[2rem] sticky top-28 shadow-2xl">
-            <h2 className="text-2xl font-bold mb-8">Order Summary</h2>
+        {cart.length === 0 ? (
+          /* Empty Active Session State Graphic */
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center py-16 bg-amber-100/40 rounded-2xl border-2 border-dashed border-amber-900/20"
+          >
+            <ShoppingBag className="w-16 h-16 mx-auto text-amber-800/40 mb-4" />
+            <h2 className="text-xl font-bold text-amber-950">Your basket is empty</h2>
+            <p className="text-slate-500 mt-1 max-w-xs mx-auto text-sm">Head back to our main menu to add delicious items to your plate.</p>
+          </motion.div>
+        ) : (
+          /* Structural Split Layout Screen Grid */
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
             
-            <div className="space-y-4 text-nevtext/80">
-              <div className="flex justify-between">
-                <span>Subtotal</span>
-                <span>₹{subtotal}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Platform Fee</span>
-                <span>₹15</span>
-              </div>
-              <div className="flex justify-between">
-                <span>GST (5%)</span>
-                <span>₹{tax.toFixed(0)}</span>
-              </div>
-              
-              <div className="pt-6 mt-6 border-t border-white/10 flex justify-between items-end">
-                <div>
-                  <p className="text-sm opacity-60">Grand Total</p>
-                  <p className="text-3xl font-black text-aboutBtn">₹{(total + 15).toFixed(0)}</p>
+            {/* Left Content Column Block: Active Items Checklist */}
+            <div className="lg:col-span-2 space-y-4">
+              <div className="bg-white rounded-2xl border border-amber-900/10 shadow-sm overflow-hidden">
+                <div className="px-6 py-4 bg-amber-100/50 border-b border-amber-900/10 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <ShoppingBag className="w-5 h-5 text-amber-800" />
+                    <h2 className="font-bold text-amber-950">Selected Dishes</h2>
+                  </div>
+                  <span className="text-xs bg-amber-900/10 text-amber-900 font-bold px-2.5 py-1 rounded-full">
+                    {cart.reduce((total, i) => total + i.qty, 0)} Items
+                  </span>
                 </div>
+
+                <ul className="divide-y divide-amber-900/5">
+                  <AnimatePresence>
+                    {cart.map((item, idx) => (
+                      <motion.li 
+                        key={item.name}
+                        initial={{ opacity: 1 }}
+                        exit={{ opacity: 0, x: -50, height: 0, padding: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="p-5 flex items-center gap-4 group"
+                      >
+                        {/* Menu Matching Thumbnail Asset */}
+                        <img 
+                          src={item.image} 
+                          alt={item.name} 
+                          className="w-16 h-16 object-cover rounded-xl bg-amber-100/60 flex-shrink-0 border border-amber-900/10" 
+                        />
+                        
+                        {/* Item Label Identity Metadata */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <h3 className="font-bold text-slate-900 text-sm sm:text-base truncate">{item.name}</h3>
+                            <span className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${item.type === 'veg' ? 'bg-green-600' : 'bg-red-600'}`} title={item.type}/>
+                          </div>
+                          <p className="text-xs font-semibold text-amber-800 mt-0.5">{item.price} each</p>
+                        </div>
+
+                        {/* Interactive Dynamic Item Incrementer Core Counter */}
+                        <div className="flex items-center border border-amber-900/20 bg-amber-50/50 rounded-lg overflow-hidden">
+                          <button 
+                            onClick={() => updateQty(idx, -1)}
+                            className="p-1.5 hover:bg-amber-100 text-amber-900 transition"
+                          >
+                            <ChevronDown className="w-4 h-4" />
+                          </button>
+                          <span className="px-3 font-bold text-sm text-amber-950 w-8 text-center">{item.qty}</span>
+                          <button 
+                            onClick={() => updateQty(idx, 1)}
+                            className="p-1.5 hover:bg-amber-100 text-amber-900 transition"
+                          >
+                            <ChevronUp className="w-4 h-4" />
+                          </button>
+                        </div>
+
+                        {/* Extended Calculation Subtotal Field Block */}
+                        <div className="text-right min-w-[70px]">
+                          <span className="font-bold text-slate-900">{(parsePrice(item.price) * item.qty)}/-</span>
+                        </div>
+
+                        {/* Mutation Action Delete Node Trigger */}
+                        <button 
+                          onClick={() => removeItem(idx)}
+                          className="text-slate-400 hover:text-red-600 p-1 transition"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </motion.li>
+                    ))}
+                  </AnimatePresence>
+                </ul>
               </div>
+
+              {/* Free Delivery Progression Status Component Banner */}
+              {subtotal < 500 && (
+                <div className="bg-amber-100 border border-amber-200 p-4 rounded-xl text-xs sm:text-sm text-amber-950 flex items-center justify-between">
+                  <span>Add <strong>{(500 - subtotal)}/-</strong> more to unlock <strong>Free Delivery!</strong></span>
+                  <span className="font-bold text-amber-900">Threshold: 500/-</span>
+                </div>
+              )}
             </div>
 
-            <button className="w-full mt-10 bg-gradient-to-r from-aboutBtn to-nevtext py-4 rounded-2xl text-black font-black text-lg shadow-[0_10px_20px_rgba(204,188,140,0.2)] hover:shadow-[0_15px_30px_rgba(204,188,140,0.3)] hover:-translate-y-1 transition-all active:scale-95"> Place Order </button>
-            
-            <p className="text-[10px] text-center mt-6 opacity-40 uppercase tracking-tighter"> Secure Checkout Powered by Royal Rasoi</p>
+            {/* Right Content Column Block: Invoicing & Payment Layout Form */}
+            <div className="space-y-6">
+              
+              {/* Delivery Node Address Metadata Card */}
+              <div className="bg-white p-5 rounded-2xl border border-amber-900/10 shadow-sm">
+                <h3 className="font-bold text-amber-950 mb-3 flex items-center gap-2 text-sm sm:text-base">
+                  <Truck className="w-4 h-4 text-amber-800" /> Delivery Target Point
+                </h3>
+                <div className="text-xs sm:text-sm text-slate-600 space-y-1 bg-amber-50/40 p-3 rounded-xl border border-amber-900/5">
+                  <p className="font-bold text-slate-900">Your Main Table / Address</p>
+                  <p className="text-slate-500">Table 4, Floor 1 (Dine-in Session)</p>
+                </div>
+              </div>
+
+              {/* Payment Execution Selector Input Context Module */}
+              <div className="bg-white p-5 rounded-2xl border border-amber-900/10 shadow-sm">
+                <h3 className="font-bold text-amber-950 mb-3 flex items-center gap-2 text-sm sm:text-base">
+                  <CreditCard className="w-4 h-4 text-amber-800" /> Settlement Processor
+                </h3>
+                <div className="grid grid-cols-2 gap-2 text-xs font-bold">
+                  <label className="border-2 border-amber-600 bg-amber-50/30 p-2.5 rounded-xl flex flex-col items-center gap-1 cursor-pointer">
+                    <span className="text-amber-950">Pay via UPI</span>
+                  </label>
+                  <label className="border border-slate-200 hover:border-amber-600 p-2.5 rounded-xl flex flex-col items-center gap-1 cursor-pointer transition">
+                    <span className="text-slate-600">Pay Counter Cash</span>
+                  </label>
+                </div>
+              </div>
+
+              {/* Precise Financial Aggregation Ledger Card */}
+              <div className="bg-white p-5 rounded-2xl border border-amber-900/10 shadow-sm relative overflow-hidden">
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-amber-700 to-amber-900" />
+                <h3 className="font-bold text-amber-950 mb-4 text-sm sm:text-base">Order Receipt Invoice</h3>
+                
+                <div className="space-y-3 text-xs sm:text-sm border-b border-dashed border-amber-900/20 pb-4">
+                  <div className="flex justify-between text-slate-600">
+                    <span>Dishes Subtotal</span>
+                    <span className="font-medium">{subtotal}/-</span>
+                  </div>
+                  <div className="flex justify-between text-slate-600">
+                    <span>Restaurant GST (5%)</span>
+                    <span className="font-medium">{gstTax.toFixed(2)}/-</span>
+                  </div>
+                  <div className="flex justify-between text-slate-600">
+                    <span>Delivery/Service Fee</span>
+                    <span className="font-medium">
+                      {deliveryCharge === 0 ? <span className="text-green-600 font-bold">FREE</span> : `${deliveryCharge}/-`}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex justify-between items-center font-extrabold text-base sm:text-lg text-slate-900 pt-4">
+                  <span className="text-amber-950">Grand Total</span>
+                  <span className="text-amber-900 bg-amber-100 px-3 py-1 rounded-xl">{grandTotal.toFixed(2)}/-</span>
+                </div>
+
+                {/* Main Interactive Call-To-Action Process Form Submit Button Node */}
+                <button className="w-full mt-5 bg-amber-800 hover:bg-amber-900 text-white py-3 px-4 rounded-xl font-bold text-sm tracking-wide transition-all shadow-md hover:shadow-lg transform active:scale-[0.99]">
+                  Place & Authenticate Order
+                </button>
+              </div>
+
+            </div>
           </div>
-        </div>
+        )}
+
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default Cart

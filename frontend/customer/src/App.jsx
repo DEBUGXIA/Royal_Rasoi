@@ -36,7 +36,7 @@ const App = () => {
   };
 
   return (
-    <div className='p-5 bg-[url(/public/Body.svg)] bg-cover overflow-x-hidden scroll-smooth min-h-screen overflow-y-auto w-[100%] aspect-[16/9] px-30 py-5'>
+    <div className='p-5 bg-[url(/public/Body.svg)] bg-cover overflow-x-hidden scroll-smooth min-h-screen overflow-y-auto w-[100%] aspect-[16/9]  py-5'>
       <Nevbar />
 
       <Routes>

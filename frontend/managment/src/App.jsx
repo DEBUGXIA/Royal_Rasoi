@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Nevbar from './Components/Nevbar'
 import { Route, Routes } from 'react-router-dom'
 import Menu from './Pages/Menu'
@@ -6,6 +6,7 @@ import Notification from './Pages/Notification'
 import Mailbox from './Pages/Mailbox'
 import Order from './Pages/Order'
 import Payment from './Pages/Payment'
+import EditMenu from './Pages/EditMenu'
 
 const App = () => {
 
@@ -18,8 +19,13 @@ const App = () => {
         <Route path='/Menu' element={<Menu />} />
         <Route path='/Order' element={<Order />} />
         <Route path='/Payment' element={<Payment />} />
+
+        <Route path='/EditMenu' element={<EditMenu/>}/>
+
+
         <Route path='/Notification' element={<Notification />} />
         <Route path='/Mailbox' element={<Mailbox />} />
+        
       </Routes>
     </div>
   )

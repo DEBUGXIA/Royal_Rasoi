@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
-import { Search } from 'lucide-react';
+import { Search, CircleCheckBig } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { motion } from "framer-motion";
 
-const Menu = () => {
-  const [isOn, setIsOn] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const toggleSwitch = () => setIsOn(!isOn);
-
-
-  const menuData = {
+const EditMenu = () => {
+  
+  const [menu, setMenu] = useState({
     starters: [
       { name: "Mutton Seekh kebab", price: "420/-", image: "public/Food.svg", type: "nonveg" },
       { name: "Paneer Tikka", price: "260/-", image: "public/Food1.svg", type: "veg" },
@@ -52,7 +48,12 @@ const Menu = () => {
       { name: "Mutton Rogan Josh", price: "380/-", image: "public/Food28.svg", type: "nonveg" },
       { name: "Fish Curry", price: "320/-", image: "public/Food29.svg", type: "nonveg" },
     ]
-  };
+  });
+
+  const [isOn, setIsOn] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const toggleSwitch = () => setIsOn(!isOn);
 
   const filterItems = (items) => {
     return items.filter((item) => {
@@ -62,39 +63,68 @@ const Menu = () => {
     });
   };
 
-  const handleAddToCart = (item) => {
-    console.log("Added to cart:", item.name);
+ 
+  const handleItemEdit = (sectionKey, originalIndex, field, value) => {
+    setMenu((prevMenu) => {
+      const updatedSection = [...prevMenu[sectionKey]];
+      updatedSection[originalIndex] = {
+        ...updatedSection[originalIndex],
+        [field]: value
+      };
+      return { ...prevMenu, [sectionKey]: updatedSection };
+    });
   };
 
-  // Reusable Section Component
-  const MenuSection = ({ items }) => {
+  
+  const MenuSection = ({ items, sectionKey }) => {
     const filtered = filterItems(items);
     if (filtered.length === 0) return null;
 
     return (
-      <div className="flex flex-wrap gap-8 p-10 justify-center">
-        {filtered.map((item, index) => (
-          <motion.div  layout key={index}  className="bg-white/5 backdrop-blur-xl rounded-2xl text-center p-5 shadow-lg transition duration-300 hover:-translate-y-2 hover:shadow-2xl w-[250px]">
-            <img src={item.image} alt={item.name} className="w-[180px] mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-nevtext">{item.name}</h2>
-            <p className="text-lg mt-1 text-nevtext">₹{item.price}</p>
-            <div className="mt-4">
-              <button onClick={() => handleAddToCart(item)} className="bg-gradient-to-r from-aboutBtn to-nevtext font-semibold text-black px-4 py-2 rounded-lg transition duration-300"> Add to Cart</button>
+      <div className="flex flex-col gap-8 p-10 justify-center">
+        {filtered.map((item) => {
+          
+          const originalIndex = menu[sectionKey].findIndex((i) => i.name === item.name);
+
+          return (
+            <div key={originalIndex} className='flex flex-row items-center justify-between bg-amber-100 border-2 border-gray-800/20 rounded-2xl px-3 py-1 shadow-lg hover:shadow-2xl w-full gap-4'>
+              
+              <div className="relative group w-20 h-20 flex items-center justify-center overflow-hidden rounded">
+                <img src={item.image} alt={item.name} className='w-full object-cover'/>
+                <input type="file" accept="image/*" onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      const url = URL.createObjectURL(file);
+                      handleItemEdit(sectionKey, originalIndex, 'image', url);
+                    }}}  className='absolute inset-0 opacity-0 cursor-pointer' />
+              </div>
+              
+              <div className="flex-1">
+                <input type="text" value={item.name} onChange={(e) => handleItemEdit(sectionKey, originalIndex, 'name', e.target.value)} className="bg-transparent border-b border-dashed border-gray-400 focus:border-solid focus:outline-none w-full font-medium" />
+                <span className="text-xs text-gray-500 block mt-0.5">({item.type})</span>
+              </div>
+
+              <div>
+                <input  type="text"  value={item.price} onChange={(e) => handleItemEdit(sectionKey, originalIndex, 'price', e.target.value)} className="bg-transparent border-b border-dashed border-gray-400 focus:border-solid focus:outline-none w-20 text-right font-medium"/>
+              </div>
+
+              
+              <div>
+                <Link to="/Menu">
+                  <CircleCheckBig color="#5d5b5b" className="hover:scale-110 transition-transform" />
+                </Link>
+              </div>
+
             </div>
-          </motion.div>
-        ))}
+          );
+        })}
       </div>
     );
   };
 
   return (
     <div className="min-h-screen bg-transparent">
-      <div className='flex flex-row items-center mt-5 justify-center gap-10 px-10'>
-        <div className='flex flex-row items-center gap-4 w-full max-w-2xl border-2 border-nevtext rounded-3xl px-5 py-2'>
-          <Search color="#DCCC8C" strokeWidth={2} />
-          <input type="text" placeholder="Search Your Favorite Food . . ."  className='w-full bg-transparent outline-none text-lg font-medium text-nevtext' value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}/>
-        </div>
-
+      <div className='flex flex-row items-end mt-5 justify-end gap-10 px-10'>
         <div className='flex flex-row items-center gap-3'>
           <div className='text-lg font-medium text-nevtext'>Veg</div>
           <div onClick={toggleSwitch} className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition-colors duration-300 ${isOn ? 'bg-green-600' : 'bg-gray-400'}`} style={{ border: "2px solid #DCCC8C" }}>
@@ -104,12 +134,12 @@ const Menu = () => {
       </div>
 
       <div className="mt-5">
-        {Object.values(menuData).map((section, idx) => (
-          <MenuSection key={idx} items={section} />
+        {Object.keys(menu).map((key) => (
+          <MenuSection key={key} sectionKey={key} items={menu[key]} />
         ))}
       </div>
     </div>
   );
 };
 
-export default Menu;
+export default EditMenu;
