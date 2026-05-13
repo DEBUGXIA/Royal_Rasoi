@@ -23,8 +23,8 @@ export default function BookingPage() {
 
           
           <div>
-            <label className="text-sm text-gray-300">Phone Number</label>
-            <input type="tel" placeholder="+91 XXXXX XXXXX" className="w-full mt-2 px-4 py-3 bg-black/40 border border-gray-600 rounded-lg focus:outline-none focus:border-[#e6c77e]"/>
+            <label className="text-sm text-gray-300">Mail Id</label>
+            <input type="tel" placeholder="xxxxxxxxxxxx@gmail.com" className="w-full mt-2 px-4 py-3 bg-black/40 border border-gray-600 rounded-lg focus:outline-none focus:border-[#e6c77e]"/>
           </div>
 
           

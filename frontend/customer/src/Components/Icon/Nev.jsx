@@ -12,7 +12,7 @@ const Nev = () => {
       <Link to="/">Home</Link>
       <Link to="/Menu">Menu</Link>
       <Link to="/Booking">Booking</Link>
-      <Link to="/Contacts">Services</Link>
+      <Link to="/Services">Services</Link>
       <Link to="/Cart">Cart</Link>
     </div>
   )

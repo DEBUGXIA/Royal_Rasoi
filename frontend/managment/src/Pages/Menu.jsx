@@ -52,6 +52,13 @@ const Menu = () => {
       { name: "Chicken Korma", price: "300/-", image: "public/Food27.svg", type: "nonveg", edit:<SquarePen color="#5d5b5b" /> },
       { name: "Mutton Rogan Josh", price: "380/-", image: "public/Food28.svg", type: "nonveg", edit:<SquarePen color="#5d5b5b" /> },
       { name: "Fish Curry", price: "320/-", image: "public/Food29.svg", type: "nonveg", edit:<SquarePen color="#5d5b5b" /> },
+    ],
+    Desert: [
+      { name: "Gulab Jamun", price: "120/-", image: "public/Food30.svg", type: "veg" },
+      { name: "Rasgulla", price: "100/-", image: "public/Food31.svg", type: "veg" },
+      { name: "Gajar Ka Halwa", price: "160/-", image: "public/Food32.svg", type: "veg" },
+      { name: "Kheer", price: "1400/-", image: "public/Food33.svg", type: "veg" },
+      { name: "Kulfi", price: "120/-", image: "public/Food34.svg", type: "veg" },
     ]
   };
 
@@ -64,7 +71,7 @@ const Menu = () => {
     });
   };
 
-  // Reusable Section Component
+  
   const MenuSection = ({ items }) => {
     const filtered = filterItems(items);
     if (filtered.length === 0) return null;

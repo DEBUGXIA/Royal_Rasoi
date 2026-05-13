@@ -50,7 +50,7 @@ const About = () => {
 
       </div>
 
-      {/* Footer Quote */}
+     
       <div className="text-center mt-20">
         <p className="text-[#e6c77e] italic text-lg"> "Dining is not just eating — it’s an experience."</p>
       </div>

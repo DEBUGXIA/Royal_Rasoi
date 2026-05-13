@@ -51,6 +51,13 @@ const Menu = () => {
       { name: "Chicken Korma", price: "300/-", image: "public/Food27.svg", type: "nonveg" },
       { name: "Mutton Rogan Josh", price: "380/-", image: "public/Food28.svg", type: "nonveg" },
       { name: "Fish Curry", price: "320/-", image: "public/Food29.svg", type: "nonveg" },
+    ],
+    Desert: [
+      { name: "Gulab Jamun", price: "120/-", image: "public/Food30.svg", type: "veg" },
+      { name: "Rasgulla", price: "100/-", image: "public/Food31.svg", type: "veg" },
+      { name: "Gajar Ka Halwa", price: "160/-", image: "public/Food32.svg", type: "veg" },
+      { name: "Kheer", price: "1400/-", image: "public/Food33.svg", type: "veg" },
+      { name: "Kulfi", price: "120/-", image: "public/Food34.svg", type: "veg" },
     ]
   };
 
@@ -66,13 +73,13 @@ const Menu = () => {
     console.log("Added to cart:", item.name);
   };
 
-  // Reusable Section Component
+  
   const MenuSection = ({ items }) => {
     const filtered = filterItems(items);
     if (filtered.length === 0) return null;
 
     return (
-      <div className="flex flex-wrap gap-8 p-10 justify-center">
+      <div className="flex flex-wrap gap-8 p-10 justify-start">
         {filtered.map((item, index) => (
           <motion.div  layout key={index}  className="bg-white/5 backdrop-blur-xl rounded-2xl text-center p-5 shadow-lg transition duration-300 hover:-translate-y-2 hover:shadow-2xl w-[250px]">
             <img src={item.image} alt={item.name} className="w-[180px] mx-auto mb-4" />

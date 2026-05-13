@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Bell, CheckCircle, Clock, Tag, X } from 'lucide-react';
 
 const Notification = () => {
-  // Mock data for notifications
+
   const notifications = [
     {id: 1, type: 'order', title: 'Order Confirmed', message: 'Your Chicken Biryani is being prepared by our head chef.', time: '2 mins ago', icon: <Clock className="text-aboutBtn" />,},
     {id: 2, type: 'booking', title: 'Table Reserved', message: 'Success! Your table for 4 is booked for tonight at 8:30 PM.', time: '1 hour ago', icon: <CheckCircle className="text-green-400" />,},

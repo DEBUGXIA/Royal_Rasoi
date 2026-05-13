@@ -9,12 +9,12 @@ const Cart = () => {
     { name: "Veg Hakka Noodles", price: "230/-", image: "public/Food13.svg", type: "veg", qty: 1 }
   ]);
 
-  // Clean currency syntax string (e.g. "420/-") to floating number
+  
   const parsePrice = (priceStr) => {
     return parseFloat(priceStr.replace('/-', '')) || 0;
   };
 
-  // Up/down quantity and absolute structural mutation controls
+  
   const updateQty = (index, delta) => {
     const updated = [...cart];
     updated[index].qty = Math.max(1, updated[index].qty + delta);
@@ -25,9 +25,9 @@ const Cart = () => {
     setCart(cart.filter((_, i) => i !== index));
   };
 
-  // Dynamic real-time calculation aggregators
+  
   const subtotal = cart.reduce((acc, item) => acc + (parsePrice(item.price) * item.qty), 0);
-  const gstTax = subtotal * 0.05; // 5% GST for restaurant items
+  const gstTax = subtotal * 0.05; 
   const deliveryCharge = subtotal > 500 || subtotal === 0 ? 0 : 40;
   const grandTotal = subtotal + gstTax + deliveryCharge;
 
@@ -35,21 +35,21 @@ const Cart = () => {
     <div className="min-h-screen py-10 px-4 sm:px-6 lg:px-8 font-sans antialiased text-nevtext">
       <div className="max-w-5xl mx-auto">
         
-        {/* Navigation Map Path */}
+        
         <nav className="flex items-center space-x-2 text-sm text-nevtext mb-6">
           <span className="hover:text-amber-900 cursor-pointer">Menu</span>
           <ChevronRight className="w-4 h-4" />
           <span className="text-nevtext font-semibold">Current Order Summary</span>
         </nav>
 
-        {/* Page Top Header */}
+        
         <div className="border-b border-amber-900/10 pb-5 mb-8">
           <h1 className="text-3xl font-extrabold tracking-tight text-nevtext">Review Your Order</h1>
           <p className="text-sm text-nevtext mt-1">Please confirm your culinary selections before checking out.</p>
         </div>
 
         {cart.length === 0 ? (
-          /* Empty Active Session State Graphic */
+          
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -60,10 +60,10 @@ const Cart = () => {
             <p className="text-slate-500 mt-1 max-w-xs mx-auto text-sm">Head back to our main menu to add delicious items to your plate.</p>
           </motion.div>
         ) : (
-          /* Structural Split Layout Screen Grid */
+          
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
             
-            {/* Left Content Column Block: Active Items Checklist */}
+          
             <div className="lg:col-span-2 space-y-4">
               <div className="bg-white rounded-2xl border border-amber-900/10 shadow-sm overflow-hidden">
                 <div className="px-6 py-4 bg-amber-100/50 border-b border-amber-900/10 flex items-center justify-between">
@@ -79,21 +79,11 @@ const Cart = () => {
                 <ul className="divide-y divide-amber-900/5">
                   <AnimatePresence>
                     {cart.map((item, idx) => (
-                      <motion.li 
-                        key={item.name}
-                        initial={{ opacity: 1 }}
-                        exit={{ opacity: 0, x: -50, height: 0, padding: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="p-5 flex items-center gap-4 group"
-                      >
-                        {/* Menu Matching Thumbnail Asset */}
-                        <img 
-                          src={item.image} 
-                          alt={item.name} 
-                          className="w-16 h-16 object-cover rounded-xl bg-amber-100/60 flex-shrink-0 border border-amber-900/10" 
-                        />
+                      <motion.li key={item.name} initial={{ opacity: 1 }} exit={{ opacity: 0, x: -50, height: 0, padding: 0 }} transition={{ duration: 0.2 }} className="p-5 flex items-center gap-4 group">
                         
-                        {/* Item Label Identity Metadata */}
+                        <img src={item.image}  alt={item.name}  className="w-16 h-16 object-cover rounded-xl bg-amber-100/60 flex-shrink-0 border border-amber-900/10" />
+                        
+                     
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
                             <h3 className="font-bold text-slate-900 text-sm sm:text-base truncate">{item.name}</h3>
@@ -102,33 +92,23 @@ const Cart = () => {
                           <p className="text-xs font-semibold text-amber-800 mt-0.5">{item.price} each</p>
                         </div>
 
-                        {/* Interactive Dynamic Item Incrementer Core Counter */}
+                        
                         <div className="flex items-center border border-amber-900/20 bg-amber-50/50 rounded-lg overflow-hidden">
-                          <button 
-                            onClick={() => updateQty(idx, -1)}
-                            className="p-1.5 hover:bg-amber-100 text-amber-900 transition"
-                          >
+                          <button onClick={() => updateQty(idx, -1)} className="p-1.5 hover:bg-amber-100 text-amber-900 transition">
                             <ChevronDown className="w-4 h-4" />
                           </button>
                           <span className="px-3 font-bold text-sm text-amber-950 w-8 text-center">{item.qty}</span>
-                          <button 
-                            onClick={() => updateQty(idx, 1)}
-                            className="p-1.5 hover:bg-amber-100 text-amber-900 transition"
-                          >
+                          <button onClick={() => updateQty(idx, 1)} className="p-1.5 hover:bg-amber-100 text-amber-900 transition">
                             <ChevronUp className="w-4 h-4" />
                           </button>
                         </div>
 
-                        {/* Extended Calculation Subtotal Field Block */}
+                        
                         <div className="text-right min-w-[70px]">
                           <span className="font-bold text-slate-900">{(parsePrice(item.price) * item.qty)}/-</span>
                         </div>
 
-                        {/* Mutation Action Delete Node Trigger */}
-                        <button 
-                          onClick={() => removeItem(idx)}
-                          className="text-slate-400 hover:text-red-600 p-1 transition"
-                        >
+                        <button onClick={() => removeItem(idx)} className="text-slate-400 hover:text-red-600 p-1 transition" >
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </motion.li>
@@ -137,7 +117,7 @@ const Cart = () => {
                 </ul>
               </div>
 
-              {/* Free Delivery Progression Status Component Banner */}
+              
               {subtotal < 500 && (
                 <div className="bg-amber-100 border border-amber-200 p-4 rounded-xl text-xs sm:text-sm text-amber-950 flex items-center justify-between">
                   <span>Add <strong>{(500 - subtotal)}/-</strong> more to unlock <strong>Free Delivery!</strong></span>
@@ -146,10 +126,19 @@ const Cart = () => {
               )}
             </div>
 
-            {/* Right Content Column Block: Invoicing & Payment Layout Form */}
+            
             <div className="space-y-6">
+
+              <div className="bg-white p-5 rounded-2xl border border-amber-900/10 shadow-sm">
+                <h3 className="font-bold text-amber-950 mb-3 flex items-center gap-2 text-sm sm:text-base">
+                  User Information
+                </h3>
+                <div className="text-xs sm:text-sm text-slate-600 space-y-1 bg-amber-50/40 p-3 rounded-xl border border-amber-900/5">
+                  <input type="text" placeholder='Your Name' className='border-2 border-gray-800/50 rounded-2xl px-2' />
+                  <input type="text" placeholder='Your Mail Id' className='border-2 border-gray-800/50 rounded-2xl px-2'  />
+                </div>
+              </div>
               
-              {/* Delivery Node Address Metadata Card */}
               <div className="bg-white p-5 rounded-2xl border border-amber-900/10 shadow-sm">
                 <h3 className="font-bold text-amber-950 mb-3 flex items-center gap-2 text-sm sm:text-base">
                   <Truck className="w-4 h-4 text-amber-800" /> Delivery Target Point
@@ -160,7 +149,7 @@ const Cart = () => {
                 </div>
               </div>
 
-              {/* Payment Execution Selector Input Context Module */}
+              
               <div className="bg-white p-5 rounded-2xl border border-amber-900/10 shadow-sm">
                 <h3 className="font-bold text-amber-950 mb-3 flex items-center gap-2 text-sm sm:text-base">
                   <CreditCard className="w-4 h-4 text-amber-800" /> Settlement Processor

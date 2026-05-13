@@ -5,6 +5,7 @@ export default function ContactPage() {
     <div className="min-h-scree text-white px-6 py-12">
       
       
+      
       <div className="text-center mb-12">
         <h1 className="text-5xl font-bold bg-gradient-to-bl from-muttonTop to-muttonDown bg-clip-text text-transparent tracking-wide">
           Contact Us
@@ -63,9 +64,7 @@ export default function ContactPage() {
 
             <textarea rows="5" placeholder="Your Message" className="w-full px-4 py-3 bg-black/40 border border-gray-600 rounded-lg focus:outline-none focus:border-[#e6c77e] text-white"/>
 
-            <button type="submit" className="w-full py-3 rounded-lg bg-gradient-to-r from-[#e6c77e] to-[#c2a96a] text-black font-semibold hover:opacity-90 transition duration-300 shadow-md">
-              Send Message
-            </button>
+            <button type="submit" className="w-full py-3 rounded-lg bg-gradient-to-r from-[#e6c77e] to-[#c2a96a] text-black font-semibold hover:opacity-90 transition duration-300 shadow-md"> Send Message</button>
           </form>
         </div>
 

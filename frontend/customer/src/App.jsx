@@ -9,6 +9,7 @@ import Cart from './Pages/Cart'
 import Notification from './Pages/Notification'
 import Booking from './Pages/Booking'
 import About from './Pages/About'
+import Services from './Pages/Services'
 
 const App = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -43,6 +44,7 @@ const App = () => {
         <Route path='/' element={<Home />} />
         <Route path='/Menu' element={<Menu addToCart={addToCart} />} />
         <Route path='/Booking' element={<Booking />} />
+        <Route path='/Services' element={<Services />} />
         <Route path='/Contacts' element={<Contacts />} />
         <Route path='/Cart' element={<Cart cartItems={cartItems} updateQuantity={updateQuantity} removeFromCart={removeFromCart} />} />
         <Route path='/Notification' element={<Notification />} />
