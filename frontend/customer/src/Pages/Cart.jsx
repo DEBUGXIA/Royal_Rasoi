@@ -175,7 +175,7 @@ const Cart = () => {
                 </div>
               </div>
 
-              {/* Precise Financial Aggregation Ledger Card */}
+              
               <div className="bg-white p-5 rounded-2xl border border-amber-900/10 shadow-sm relative overflow-hidden">
                 <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-amber-700 to-amber-900" />
                 <h3 className="font-bold text-amber-950 mb-4 text-sm sm:text-base">Order Receipt Invoice</h3>
@@ -202,7 +202,7 @@ const Cart = () => {
                   <span className="text-amber-900 bg-amber-100 px-3 py-1 rounded-xl">{grandTotal.toFixed(2)}/-</span>
                 </div>
 
-                {/* Main Interactive Call-To-Action Process Form Submit Button Node */}
+                
                 <button className="w-full mt-5 bg-amber-800 hover:bg-amber-900 text-white py-3 px-4 rounded-xl font-bold text-sm tracking-wide transition-all shadow-md hover:shadow-lg transform active:scale-[0.99]">
                   Place & Authenticate Order
                 </button>

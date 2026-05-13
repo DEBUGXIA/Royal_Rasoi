@@ -12,7 +12,7 @@ const Menu = () => {
 
   const menuData = {
     starters: [
-      { name: "Mutton Seekh kebab", price: "420/-", image: "public/Food.svg", type: "nonveg", edit:<SquarePen color="#5d5b5b" /> },
+      { name: "Mutton Seekh kebab", price: "420/-", image: "public/Food.svg", type: "nonveg", edit:<SquarePen color="#5d5b5b" />, Time:"5 min", },
       { name: "Paneer Tikka", price: "260/-", image: "public/Food1.svg", type: "veg", edit:<SquarePen color="#5d5b5b" />},
       { name: "Chicken Tikka", price: "300/-", image: "public/Food2.svg", type: "nonveg", edit:<SquarePen color="#5d5b5b" /> },
       { name: "Chicken Seekh Kebab", price: "320/-", image: "public/Food3.svg", type: "nonveg", edit:<SquarePen color="#5d5b5b" /> },
@@ -74,7 +74,7 @@ const Menu = () => {
         {filtered.map((item, index) => (
           <div key={index} className=' flex flex-row items-center justify-between bg-amber-100 border-2 border-gray-800/20 rounded-2xl px-3 py-1 shadow-lg hover:shadow-2xl w-full'>
             <div><img src={item.image} alt={item.name}  className='w-20'/></div>
-            <div>{item.name} ({item.type})</div>
+            <div>{item.name} ({item.type}) <p className=' text-xs text-gray-800/50 font-semibold'>{item.Time}</p></div>
             <div>{item.price}</div>
             <div><button><Link to='/EditMenu'>{item.edit}</Link></button></div>
           </div>
